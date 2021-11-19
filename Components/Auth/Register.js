@@ -1,63 +1,134 @@
-import React, { Component } from "react";
-import { Button, StyleSheet, TextInput, View } from "react-native";
+import { useNavigation } from "@react-navigation/core";
+import React, { useEffect, useState } from "react";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { auth } from "../../firebase";
 
-import firebase from "firebase";
-export class Register extends Component {
-  constructor(props) {
-    super(props);
+const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const navigation = useNavigation();
 
-    this.state = {
-      email: "",
-      password: "",
-      name: "",
-    };
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("Landing");
+      }
+    });
+    return unsubscribe;
+  }, []);
 
-    this.ononSignUp = this.onSignUp.bind(this);
-  }
-
-  onSignUp() {
-    const { email, name, password } = this.state;
-    firebase
-      .auth()
+  const handleSignUp = () => {
+    auth
       .createUserWithEmailAndPassword(email, password)
-      .then((results) => {
-        conso;
-
-        le.log(results);
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Regiesterd With : ", user.email);
       })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+      .catch((error) => alert(error.message));
+  };
 
-  render() {
-    0;
-    return (
-      <View style={styles.container}>
+  const handleLogIn = () => {
+    auth.signInWithEmailAndPassword(email, password).then((userCredentials) => {
+      const user = userCredentials.user;
+      console.log("Loged In With : ", user.email);
+    });
+  };
+  return (
+    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
+      <View style={styles.inputContainer}>
         <TextInput
-          placeholder="name"
-          onChangeText={(name) => this.setState({ name })}
+          placeholder="Name"
+          placeholderTextColor="#fff"
+          // value={}
+          onChangeText={(text) => setName(text)}
+          style={[styles.input, styles.textInputStyles]}
         />
         <TextInput
-          placeholder="email"
-          onChangeText={(email) => this.setState({ email })}
+          placeholder="Email"
+          placeholderTextColor="#fff"
+          // value={}
+          onChangeText={(text) => setEmail(text)}
+          style={[styles.input, styles.textInputStyles]}
         />
         <TextInput
-          placeholder="password"
+          placeholder="Password"
+          placeholderTextColor="#fff"
+          // value={}
+          onChangeText={(text) => setPassword(text)}
+          style={[styles.input, styles.textInputStyles]}
           secureTextEntry
-          onChangeText={(password) => this.setState({ password })}
         />
-        <Button onPress={() => this.onSignUp()} title="onSignUp" />
       </View>
-    );
-  }
-}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleLogIn} style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleSignUp}
+          style={[styles.button, styles.buttonOutline]}
+        >
+          <Text style={styles.buttonOutlineText}>Register</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
 
 export default Register;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#f0f8ff",
     flex: 1,
+    alignItems: "center",
     justifyContent: "center",
+  },
+  inputContainer: {
+    width: "80%",
+  },
+  input: {
+    backgroundColor: "black",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 5,
+  },
+  buttonContainer: {
+    width: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+  },
+  button: {
+    backgroundColor: "#0782F9",
+    width: "100%",
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "center",
+    marginTop: 5,
+  },
+  textInputStyles: {
+    color: "#fff",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  buttonOutline: {
+    backgroundColor: "white",
+  },
+  buttonOutlineText: {
+    color: "#0782F9",
+    fontSize: 15,
+    fontWeight: "700",
   },
 });
