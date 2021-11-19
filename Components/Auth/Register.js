@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View } from "react-native";
 
 import firebase from "firebase";
 
@@ -45,6 +45,13 @@ export class Register extends Component {
           secureTextEntry
         />
         <Button onPress={() => this.onSignUp()} title="Sign Up" />
+        <View>
+          <Text>Have An Account? </Text>
+          <Button
+            title="Sign In"
+            onPress={() => this.props.navigation.navigate("Login")}
+          />
+        </View>
       </View>
     );
   }
