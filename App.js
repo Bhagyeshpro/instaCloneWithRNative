@@ -8,6 +8,13 @@ import Register from "./Components/Auth/Register";
 import Login from "./Components/Auth/Login";
 
 import firebase from "firebase";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import rootReducer from "./Redux/reducer";
+import thunk from "redux-thunk";
+import HomeScreen from "./Components/Main";
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const firebaseConfig = {
   apiKey: "AIzaSyD1WYUBi5WDuUmO8iayk3CSx3H1tfKY9d0",
@@ -89,9 +96,9 @@ export class App extends Component {
       );
     }
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>User Logged In</Text>
-      </View>
+      <Provider store={store}>
+        <HomeScreen />
+      </Provider>
     );
   }
 }

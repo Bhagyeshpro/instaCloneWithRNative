@@ -36,6 +36,13 @@ export class Register extends Component {
       });
   }
 
+  // handleKeyPress = (event) => {
+  //   // if (event.key === "Enter") {
+  //   //   this.onSignUp();
+  //   // }
+  //   console.log("Enter Pressed!");
+  // };
+
   render() {
     return (
       <View>
