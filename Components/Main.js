@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -11,10 +11,16 @@ export class Main extends Component {
   }
   render() {
     const { currentUser } = this.props;
+    console.log(currentUser);
 
+    if (currentUser == undefined) {
+      return <View></View>;
+    }
     return (
       <div>
-        <Text>MY Work</Text>
+        <Text>
+          {currentUser.name} is logged In with {currentUser.email}
+        </Text>
       </div>
     );
   }
