@@ -3,16 +3,19 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import Landing from "./Components/Auth/Landing";
-import Register from "./Components/Auth/Register";
-import Login from "./Components/Auth/Login";
 
 import firebase from "firebase";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./Redux/reducer";
 import thunk from "redux-thunk";
+
 import HomeScreen from "./Components/Main";
+import Register from "./Components/Auth/Register";
+import AddScreen from "./Components/Main/Add";
+import Landing from "./Components/Auth/Landing";
+import MainScreen from "./Components/Main";
+import Login from "./Components/Auth/Login";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -97,7 +100,16 @@ export class App extends Component {
     }
     return (
       <Provider store={store}>
-        <HomeScreen />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen
+              name="Main"
+              component={MainScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Add" component={AddScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     );
   }
