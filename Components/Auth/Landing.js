@@ -10,6 +10,16 @@ export default function Landing({ navigation }) {
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRP5DzZgTLz3rtU2PgabPYawok_tw_0BO03bljed246ps_bDbi--7ucC-uUUu4dj_Q2tQ&usqp=CAU"
         }
         style={styles.image}
+    <View
+      style={[
+        styles.container,
+        { flex: 1, alignItems: "center", justifyContent: "center" },
+      ]}
+    >
+      <Button title="Log In" onPress={() => navigation.navigate("Login")} />
+      <Button
+        title="Register"
+        onPress={() => navigation.navigate("Register")}
       />
     </View>
   );
@@ -23,5 +33,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     marginBottom: 10,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    // alignItems: "center",
   },
 });

@@ -1,134 +1,75 @@
-import { useNavigation } from "@react-navigation/core";
-import React, { useEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { auth } from "../../firebase";
+import React, { Component } from "react";
+import { Button, Text, TextInput, View } from "react-native";
 
-const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const navigation = useNavigation();
+import firebase from "firebase";
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("Landing");
-      }
-    });
-    return unsubscribe;
-  }, []);
+export class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      name: "",
+    };
 
-  const handleSignUp = () => {
-    auth
+    this.onSignUp = this.onSignUp.bind(this);
+  }
+
+  onSignUp() {
+    const { email, name, password } = this.state;
+    firebase
+      .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Regiesterd With : ", user.email);
+      .then((result) => {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(firebase.auth().currentUser.uid)
+          .set({
+            name,
+            email,
+          });
+        console.log(result);
       })
-      .catch((error) => alert(error.message));
-  };
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-  const handleLogIn = () => {
-    auth.signInWithEmailAndPassword(email, password).then((userCredentials) => {
-      const user = userCredentials.user;
-      console.log("Loged In With : ", user.email);
-    });
-  };
-  return (
-    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
-      <View style={styles.inputContainer}>
+  // handleKeyPress = (event) => {
+  //   // if (event.key === "Enter") {
+  //   //   this.onSignUp();
+  //   // }
+  //   console.log("Enter Pressed!");
+  // };
+
+  render() {
+    return (
+      <View>
         <TextInput
           placeholder="Name"
-          placeholderTextColor="#fff"
-          // value={}
-          onChangeText={(text) => setName(text)}
-          style={[styles.input, styles.textInputStyles]}
+          onChangeText={(name) => this.setState({ name })}
         />
         <TextInput
-          placeholder="Email"
-          placeholderTextColor="#fff"
-          // value={}
-          onChangeText={(text) => setEmail(text)}
-          style={[styles.input, styles.textInputStyles]}
+          placeholder="email"
+          onChangeText={(email) => this.setState({ email })}
         />
         <TextInput
-          placeholder="Password"
-          placeholderTextColor="#fff"
-          // value={}
-          onChangeText={(text) => setPassword(text)}
-          style={[styles.input, styles.textInputStyles]}
+          placeholder="password"
+          onChangeText={(password) => this.setState({ password })}
           secureTextEntry
         />
+        <Button onPress={() => this.onSignUp()} title="Sign Up" />
+        <View>
+          <Text>Have An Account? </Text>
+          <Button
+            title="Sign In"
+            onPress={() => this.props.navigation.navigate("Login")}
+          />
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogIn} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
-  );
-};
+    );
+  }
+}
 
 export default Register;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#f0f8ff",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputContainer: {
-    width: "80%",
-  },
-  input: {
-    backgroundColor: "black",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: "60%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    borderRadius: 10,
-    padding: 10,
-    alignItems: "center",
-    marginTop: 5,
-  },
-  textInputStyles: {
-    color: "#fff",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontSize: 15,
-    fontWeight: "700",
-  },
-});
