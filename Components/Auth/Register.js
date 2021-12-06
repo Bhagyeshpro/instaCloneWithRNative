@@ -45,7 +45,14 @@ export class Register extends Component {
 
   render() {
     return (
-      <View>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          width: "100%",
+          justifyContent: "center",
+        }}
+      >
         <TextInput
           placeholder="Name"
           onChangeText={(name) => this.setState({ name })}
