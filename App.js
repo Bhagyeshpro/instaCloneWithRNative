@@ -10,12 +10,15 @@ import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./Redux/reducer";
 import thunk from "redux-thunk";
 
+// Screens
 import HomeScreen from "./Components/Main";
 import Register from "./Components/Auth/Register";
 import AddScreen from "./Components/Main/Add";
 import Landing from "./Components/Auth/Landing";
 import MainScreen from "./Components/Main";
 import Login from "./Components/Auth/Login";
+import SaveScreen from "./Components/Main/Save";
+import FeedScreen from "./Components/Main/Feed";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -107,7 +110,19 @@ export class App extends Component {
               component={MainScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Add" component={AddScreen} />
+            <Stack.Screen name="Save" component={SaveScreen} />
+            <Stack.Screen
+              name="Add"
+              component={AddScreen}
+              navigation={this.props.navigation}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Feed"
+              component={FeedScreen}
+              navigation={this.props.navigation}
+              options={{ headerShown: true }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
