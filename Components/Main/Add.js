@@ -60,7 +60,6 @@ export default function Add({ navigation }) {
           ratio={"1:1"}
         />
       </View>
-
       <Button
         title="Flip Image"
         onPress={() => {
@@ -72,15 +71,12 @@ export default function Add({ navigation }) {
         }}
       ></Button>
       <Button title="Take Picture" onPress={() => takePicture()} />
-<<<<<<< HEAD
       <Button title="Pick An Image From Gallery" onPress={() => pickImage()} />
-=======
       <Button title="Pick Image From Gallery" onPress={() => pickImage()} />
       <Button
         title="Save"
         onPress={() => navigation.navigate("Save", { image })}
       />
->>>>>>> Mihir/Adding
       {image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
     </View>
   );
