@@ -117,12 +117,6 @@ export class App extends Component {
               navigation={this.props.navigation}
               options={{ headerShown: true }}
             />
-            <Stack.Screen
-              name="Feed"
-              component={FeedScreen}
-              navigation={this.props.navigation}
-              options={{ headerShown: true }}
-            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
