@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import firebase from "firebase";
 import { Provider } from "react-redux";
@@ -103,28 +104,30 @@ export class App extends Component {
     }
     return (
       <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Main">
-            <Stack.Screen
-              name="Main"
-              component={MainScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Save" component={SaveScreen} />
-            <Stack.Screen
-              name="Add"
-              component={AddScreen}
-              navigation={this.props.navigation}
-              options={{ headerShown: true }}
-            />
-            <Stack.Screen
-              name="Feed"
-              component={FeedScreen}
-              navigation={this.props.navigation}
-              options={{ headerShown: true }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Main">
+              <Stack.Screen
+                name="Main"
+                component={MainScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="Save" component={SaveScreen} />
+              <Stack.Screen
+                name="Add"
+                component={AddScreen}
+                navigation={this.props.navigation}
+                options={{ headerShown: true }}
+              />
+              <Stack.Screen
+                name="Feed"
+                component={FeedScreen}
+                navigation={this.props.navigation}
+                options={{ headerShown: true }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
       </Provider>
     );
   }
